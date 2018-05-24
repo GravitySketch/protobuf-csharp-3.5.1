@@ -286,9 +286,16 @@ void MessageGenerator::GenerateCloningCode(io::Printer* printer) {
   std::map<string, string> vars;
   WriteGeneratedCodeAttributes(printer);
   vars["class_name"] = class_name();
-    printer->Print(
+  printer->Print(
     vars,
-    "public $class_name$($class_name$ other) : this() {\n");
+    "public $class_name$($class_name$ other) : this() {\n"
+    "  CloneFrom(other);\n"
+    "}\n\n");
+
+  WriteGeneratedCodeAttributes(printer);
+  printer->Print(
+    vars,
+    "public void CloneFrom($class_name$ other) {\n");
   printer->Indent();
   // Clone non-oneof fields first
   for (int i = 0; i < descriptor_->field_count(); i++) {
